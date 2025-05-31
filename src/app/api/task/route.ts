@@ -1,11 +1,20 @@
 import { connectToDB } from "@/server/db";
+import { paginatedResponse } from "@/server/helper";
 import Task from "@/server/modal/task";
 
-export async function GET() {
+export async function GET(req: Request) {
     await connectToDB();
     try {
-        const tasks = await Task.find().sort({ createdAt: -1 });
-        return new Response(JSON.stringify(tasks), { status: 200 });
+        const { searchParams } = new URL(req.url);
+        const page = parseInt(searchParams.get("page") || "1", 10);
+        const limit = parseInt(searchParams.get("limit") || "10", 10);
+        const skip = (page - 1) * limit;
+
+        const [data, total] = await Promise.all([
+            Task.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+            Task.countDocuments()
+        ]);
+        return new Response(JSON.stringify(paginatedResponse({ data, total, page, limit })), { status: 200 });
     } catch (error) {
         console.error("Error fetching tasks:", error);
         return new Response(JSON.stringify({ status: 500, message: "Internal Server Error" }), { status: 500 });
