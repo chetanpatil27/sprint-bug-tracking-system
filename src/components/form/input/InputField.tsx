@@ -55,6 +55,7 @@ const Input: FC<InputProps> = ({
     return (<input
       type={type}
       id={id}
+      value={field?.value ?? ""}
       placeholder={placeholder}
       // defaultValue={defaultValue}
       min={min}
@@ -62,6 +63,7 @@ const Input: FC<InputProps> = ({
       step={step}
       disabled={disabled}
       className={inputClasses}
+      onChange={field.onChange}
       {...field}
     />)
   }
@@ -72,9 +74,9 @@ const Input: FC<InputProps> = ({
       {control && name ? (
         <Controller
           control={control}
+          defaultValue=""
+          name={name}
           render={renderComp}
-          defaultValue={""}
-          name={name ?? ""}
         />) : (renderComp({ field: { name, onChange, value: value ?? "" } }))}
       <FieldMessages error={error} success={success} name={name} />
     </div>
