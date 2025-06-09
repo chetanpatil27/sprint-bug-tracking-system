@@ -9,7 +9,9 @@ const SprintForm = () => {
     console.log("data", data)
   }
   return (
-    <form onSubmit={handleSubmit(onSubmit)}><Input label="Name" name="name" control={control} /></form>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Input label="Name" name="name" control={control} />
+    </form>
   )
 }
 

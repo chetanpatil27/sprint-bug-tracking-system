@@ -3,16 +3,17 @@ import React, { useEffect } from 'react'
 import SignInForm from './form'
 import Card from '@/components/ui/card'
 import { useRouter } from 'next/navigation'
+import useReduxStore from '@/store/usestore.hook'
 
 const Page = () => {
   const router = useRouter()
+  const isAuthenticated = useReduxStore()?.auth?.isAuthenticated
 
   useEffect(() => {
-    const isAuthenticated = document.cookie.includes('isAuthenticated')
     if (isAuthenticated) {
       router.replace('/')
     }
-  }, [])
+  }, [router, isAuthenticated])
 
   return (
     <div className='h-screen'>

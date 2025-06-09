@@ -3,13 +3,18 @@ import React from "react";
 import Button from "@/components/ui/button/Button";
 import Input from "@/components/form/input/InputField";
 import { useForm } from "react-hook-form";
+import { AuthApi } from "@/store/action/auth";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store";
 
 export default function SignInForm() {
+    const dispatch = useDispatch<AppDispatch>();
     const { handleSubmit, control } = useForm()
+
     const onSubmit = (data: object) => {
-        console.log("on submit data:", data)
-        document.cookie = "isAuthenticated=true; path=/"; // Set cookie for authentication
+        dispatch(AuthApi.login({ payload: data }))
     }
+
     return (
         <>
             <h1 className="text-2xl font-semibold text-center mb-6">Sign in to your account</h1>

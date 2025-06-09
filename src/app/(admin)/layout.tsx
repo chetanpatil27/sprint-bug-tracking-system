@@ -4,6 +4,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
+import useReduxStore from "@/store/usestore.hook";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
@@ -13,7 +14,8 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
-  const router = useRouter()
+  const router = useRouter();
+  const isAuthenticated = useReduxStore()?.auth?.isAuthenticated
 
   // Dynamic class for main content margin based on sidebar state
   const mainContentMargin = isMobileOpen
@@ -23,11 +25,10 @@ export default function AdminLayout({
       : "lg:ml-[90px]";
 
   useEffect(() => {
-    const isAuthenticated = document.cookie.includes('isAuthenticated')
     if (!isAuthenticated && window.location.pathname !== '/login') {
       router.replace('/login')
     }
-  }, [])
+  }, [router, isAuthenticated])
 
   return (
     <div className="min-h-screen xl:flex">
