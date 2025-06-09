@@ -28,16 +28,16 @@ export const setFormErrors = ({ data, setError, accept }: { data: { [key: string
 };
 
 interface FormControlError {
-    [key: string]: {        message?: string    };
+  [key: string]: { message?: string };
 }
 
 export const getErrorInFormControls = (
-    error: FormControlError | string | null | object,
-    name: string
+  error: string | boolean | object | null,
+  name: string
 ): string | null => {
-    return typeof error === "object" && (error as FormControlError)?.[name]?.message
-        ? ((error as FormControlError)?.[name]?.message ?? null)
-        : typeof error === "string"
-        ? error
-        : null;
+  return typeof error === "object" && (error as FormControlError)?.[name]?.message
+    ? ((error as FormControlError)?.[name]?.message ?? null)
+    : typeof error === "string"
+      ? error
+      : null;
 };

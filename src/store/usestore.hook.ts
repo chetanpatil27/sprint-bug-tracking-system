@@ -1,8 +1,8 @@
 import { AppSelector } from '.'
 
 const useReduxStore = () => {
-    const store = AppSelector((state) => state)
-    return { ...store }
+    const auth = AppSelector((state) => state.auth)
+    return { auth }
 }
 
 export default useReduxStore
