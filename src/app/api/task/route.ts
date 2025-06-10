@@ -1,10 +1,16 @@
 import { connectToDB } from "@/server/db";
 import { paginatedResponse } from "@/server/helper";
+import { authMiddleware } from "@/server/middleware/auth";
 import Task from "@/server/modal/task";
 import User from "@/server/modal/user";
+import { NextRequest } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+    const auth = await authMiddleware(req);
+    console.log("auth", auth);
+    if (!auth) return auth;
     await connectToDB();
+
     try {
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get("page") || "1", 10);
