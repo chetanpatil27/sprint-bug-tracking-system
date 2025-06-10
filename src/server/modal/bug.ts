@@ -19,8 +19,8 @@ const BugSchema = new Schema<IBug>(
     { timestamps: true }
 );
 
-const Bug: Model<IBug> = mongoose.models.bug
-    ? (mongoose.models.bug as Model<IBug>)
-    : mongoose.model<IBug>("bug", BugSchema);
+const Bug: Model<IBug> = mongoose.models.Bug
+    ? (mongoose.models.Bug as Model<IBug>)
+    : mongoose.model<IBug>("Bug", BugSchema);
 
 export default Bug;

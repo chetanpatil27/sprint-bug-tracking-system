@@ -26,8 +26,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     const { id } = params || {};
     const { title, description } = await req.json();
 
-    if (!id || !title || !description) {
-        return new Response(JSON.stringify({ status: 400, message: "Missing required fields" }), { status: 400 });
+    if (!id) {
+        return new Response(JSON.stringify({ status: 400, message: "Task ID is required" }), { status: 400 });
     }
 
     try {

@@ -7,6 +7,8 @@ export interface ITask extends Document {
     end_date: Date;
     createdAt?: Date;
     updatedAt?: Date;
+    assignees: mongoose.Types.ObjectId[];
+    owner: mongoose.Types.ObjectId;
 }
 
 const TaskSchema = new Schema<ITask>(
@@ -15,12 +17,14 @@ const TaskSchema = new Schema<ITask>(
         description: { type: String, required: true },
         start_date: { type: Date },
         end_date: { type: Date },
+        assignees: { type: [Schema.Types.ObjectId], ref: "User" },
+        owner: { type: Schema.Types.ObjectId, ref: "User" }
     },
     { timestamps: true }
 );
 
-const Task: Model<ITask> = mongoose.models.task
-    ? (mongoose.models.task as Model<ITask>)
-    : mongoose.model<ITask>("task", TaskSchema);
+const Task: Model<ITask> = mongoose.models.Task
+    ? (mongoose.models.Task as Model<ITask>)
+    : mongoose.model<ITask>("Task", TaskSchema);
 
 export default Task;

@@ -19,8 +19,8 @@ const SprintSchema = new Schema<ISprint>(
     { timestamps: true }
 );
 
-const Sprint: Model<ISprint> = mongoose.models.sprint
-    ? (mongoose.models.sprint as Model<ISprint>)
-    : mongoose.model<ISprint>("sprint", SprintSchema);
+const Sprint: Model<ISprint> = mongoose.models.Sprint
+    ? (mongoose.models.Sprint as Model<ISprint>)
+    : mongoose.model<ISprint>("Sprint", SprintSchema);
 
 export default Sprint;
