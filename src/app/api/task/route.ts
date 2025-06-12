@@ -1,5 +1,6 @@
 import { connectToDB } from "@/server/db";
 import { paginatedResponse } from "@/server/helper";
+import { populateFields } from "@/server/helper/populate-field";
 import { withAuth } from "@/server/middleware/with-auth";
 import Task from "@/server/modal/task";
 import User from "@/server/modal/user";
@@ -41,7 +42,7 @@ export const GET = withAuth(async (req) => {
     }
 });
 
-export async function POST(req: Request) {
+export const POST = withAuth(async (req: Request, userId: string) => {
     await connectToDB();
     const postReq = await req.json();
     const { title, description, assignees } = postReq || {};
@@ -61,18 +62,24 @@ export async function POST(req: Request) {
         description,
         assignees: assignees || [],
         start_date: new Date(),
-        end_date: new Date()
+        end_date: new Date(),
+        owner: userId
     });
 
     try {
         const createdTask = await newTask.save();
-        const populatedTask = await Task.findById(createdTask._id).populate({
-            path: "assignees",
-            select: "_id f_name l_name"
-        });
+        // const populatedTask = await Task.findById(createdTask._id).populate({
+        //     path: "assignees",
+        //     select: "_id f_name l_name"
+        // }).populate({
+        //     path: "owner",
+        //     select: "_id f_name l_name"
+        // });
+
+        const populatedTask = await populateFields({ model: Task, id: createdTask._id, fields: ["assignees", "owner"], select: "_id f_name l_name" });
         return new Response(JSON.stringify({ status: 201, message: "Task created successfully", data: populatedTask }), { status: 201 });
     } catch (error) {
         console.error("Error creating task:", error);
         return new Response(JSON.stringify({ status: 500, message: "Internal Server Error" }), { status: 500 });
     }
-}
+});
