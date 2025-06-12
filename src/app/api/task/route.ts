@@ -68,15 +68,8 @@ export const POST = withAuth(async (req: Request, userId: string) => {
 
     try {
         const createdTask = await newTask.save();
-        // const populatedTask = await Task.findById(createdTask._id).populate({
-        //     path: "assignees",
-        //     select: "_id f_name l_name"
-        // }).populate({
-        //     path: "owner",
-        //     select: "_id f_name l_name"
-        // });
 
-        const populatedTask = await populateFields({ model: Task, id: createdTask._id, fields: ["assignees", "owner"], select: "_id f_name l_name" });
+        const populatedTask = await populateFields({ model: Task, id: createdTask._id, fields: ["assignees", "owner"], });
         return new Response(JSON.stringify({ status: 201, message: "Task created successfully", data: populatedTask }), { status: 201 });
     } catch (error) {
         console.error("Error creating task:", error);

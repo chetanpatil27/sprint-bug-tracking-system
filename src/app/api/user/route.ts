@@ -1,5 +1,6 @@
 import { connectToDB } from "@/server/db";
 import { paginatedResponse } from "@/server/helper";
+import { withAuth } from "@/server/middleware/with-auth";
 import User from "@/server/modal/user";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
@@ -36,7 +37,7 @@ type RegisterRequest = {
   l_name: string;
 };
 
-export async function POST(req: Request) {
+export const POST = withAuth(async (req: Request,) => {
   await connectToDB();
   const postReq: RegisterRequest = await req.json();
   const { email, password, f_name, l_name } = postReq;
@@ -57,14 +58,16 @@ export async function POST(req: Request) {
     //     { status: 400 }
     //   );
     // } else
-    if (!password || password.trim() === "") {
+    if (!f_name || !f_name.trim() || !l_name || !l_name.trim()) {
       return NextResponse.json(
         {
           status: 400,
-          message: "Password is required",
+          message: "First name and last name are required",
         },
         { status: 400 }
       );
+    } else if (!password || password.trim() === "") {
+      return NextResponse.json({ status: 400, message: "Password is required" }, { status: 400 });
     } else {
       const salt = await bcrypt.genSalt(10);
       const hashpassword = await bcrypt.hash(password, salt);
@@ -77,9 +80,10 @@ export async function POST(req: Request) {
       });
       await user.save();
       return NextResponse.json(
-        { status: 201, message: "Registration successful" },
+        { status: 201, message: "Registration successful", data: user },
         { status: 201 }
       );
     }
   }
 }
+)

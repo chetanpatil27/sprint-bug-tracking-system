@@ -48,7 +48,6 @@ export async function populateFields<T extends Document>({
         throw new Error("Document not found");
     }
     const result = doc.toObject() as Record<string, any>;
-    console.log("result", result);
     if (combineUserName) {
         combineNames(result);
     }
