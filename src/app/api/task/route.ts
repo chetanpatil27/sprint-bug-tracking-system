@@ -1,16 +1,11 @@
 import { connectToDB } from "@/server/db";
 import { paginatedResponse } from "@/server/helper";
-import { authMiddleware } from "@/server/middleware/auth";
+import { withAuth } from "@/server/middleware/with-auth";
 import Task from "@/server/modal/task";
 import User from "@/server/modal/user";
-import { NextRequest } from "next/server";
 
-export async function GET(req: NextRequest) {
-    const auth = await authMiddleware(req);
-    console.log("auth", auth);
-    if (!auth) return auth;
+export const GET = withAuth(async (req) => {
     await connectToDB();
-
     try {
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get("page") || "1", 10);
@@ -44,7 +39,7 @@ export async function GET(req: NextRequest) {
         console.error("Error fetching tasks:", error);
         return new Response(JSON.stringify({ status: 500, message: "Internal Server Error" }), { status: 500 });
     }
-}
+});
 
 export async function POST(req: Request) {
     await connectToDB();
