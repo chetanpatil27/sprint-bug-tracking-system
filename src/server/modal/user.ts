@@ -4,7 +4,7 @@ export interface IUser extends Document {
   email: string;
   f_name?: string;
   l_name?: string;
-  isActive?: boolean;
+  is_active?: boolean;
   password: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -18,10 +18,7 @@ const UserSchema = new Schema<IUser>(
     },
     f_name: { type: String },
     l_name: { type: String },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
+    is_active: { type: Boolean, default: true, },
     password: { type: String },
   },
   { timestamps: true }

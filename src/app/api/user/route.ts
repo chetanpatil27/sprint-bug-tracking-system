@@ -76,11 +76,11 @@ export const POST = withAuth(async (req: Request,) => {
         password: hashpassword,
         f_name,
         l_name,
-        isActive: true,
+        is_active: true,
       });
       await user.save();
       return NextResponse.json(
-        { status: 201, message: "Registration successful", data: user },
+        { status: 201, message: "User registration successful", data: user },
         { status: 201 }
       );
     }
