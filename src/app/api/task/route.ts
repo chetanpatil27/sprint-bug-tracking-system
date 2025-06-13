@@ -4,6 +4,7 @@ import { populateFields } from "@/server/helper/populate-field";
 import { withAuth } from "@/server/middleware/with-auth";
 import Task from "@/server/modal/task";
 import User from "@/server/modal/user";
+import { NextRequest } from "next/server";
 
 export const GET = withAuth(async (req) => {
     await connectToDB();
@@ -42,7 +43,7 @@ export const GET = withAuth(async (req) => {
     }
 });
 
-export const POST = withAuth(async (req: Request, userId: string) => {
+export const POST = withAuth(async (req: NextRequest, userId: string) => {
     await connectToDB();
     const postReq = await req.json();
     const { title, description, assignees } = postReq || {};
