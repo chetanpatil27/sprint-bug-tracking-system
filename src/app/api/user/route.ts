@@ -76,7 +76,7 @@ export const POST = withAuth(async (req: Request,) => {
         password: hashpassword,
         f_name,
         l_name,
-        is_active: true,
+        active: true,
       });
       await user.save();
       return NextResponse.json(
