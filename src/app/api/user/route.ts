@@ -33,14 +33,13 @@ type RegisterRequest = {
   email: string;
   password: string;
   confirmPassword: string;
-  f_name: string;
-  l_name: string;
+  name: string;
 };
 
 export const POST = withAuth(async (req: Request,) => {
   await connectToDB();
   const postReq: RegisterRequest = await req.json();
-  const { email, password, f_name, l_name } = postReq;
+  const { email, password, name } = postReq;
 
   const emailExist = await User.find({ email: email });
   if (emailExist.length > 0) {
@@ -58,14 +57,13 @@ export const POST = withAuth(async (req: Request,) => {
     //     { status: 400 }
     //   );
     // } else
-    if (!f_name || !f_name.trim() || !l_name || !l_name.trim()) {
+    if (!name || !name.trim()) {
       return NextResponse.json(
-        {
-          status: 400,
-          message: "First name and last name are required",
-        },
+        { status: 400, message: "Name is required", },
         { status: 400 }
       );
+    } else if (!email || email.trim() === "") {
+      return NextResponse.json({ status: 400, message: "Email is required" }, { status: 400 });
     } else if (!password || password.trim() === "") {
       return NextResponse.json({ status: 400, message: "Password is required" }, { status: 400 });
     } else {
@@ -74,8 +72,7 @@ export const POST = withAuth(async (req: Request,) => {
       const user = new User({
         email,
         password: hashpassword,
-        f_name,
-        l_name,
+        name,
         active: true,
       });
       await user.save();
