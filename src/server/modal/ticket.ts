@@ -37,7 +37,7 @@ const TicketSchema = new Schema<ITicket>(
             required: true
         },
         project_id: { type: Schema.Types.ObjectId, ref: "Project", required: true },
-        assignee: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        assignee: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
         comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
         owner: { type: Schema.Types.ObjectId, ref: "User", required: true }
     },

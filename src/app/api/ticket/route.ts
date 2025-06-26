@@ -13,7 +13,7 @@ export const GET = withAuth(async (req: NextRequest) => {
     const skip = (page - 1) * limit;
     const [data, total] = await Promise.all([
         Ticket.find().sort({ createdAt: -1 }).skip(skip).limit(limit).populate({
-            path: "assignees",
+            path: "assignee",
             select: "_id f_name l_name"
         }),
         Ticket.countDocuments()
@@ -25,7 +25,7 @@ export const POST = withAuth(async (req: NextRequest, userId: string) => {
     await connectToDB();
     const postReq = await req.json();
     const { name, description, type, priority, status, project_id, assignee } = postReq || {};
-
+    console.log("assignee", typeof assignee, assignee)
     if (!name || !type || !priority || !status || !project_id) {
         return NextResponse.json({ status: 400, message: "Missing required fields" }, { status: 400 });
     }
